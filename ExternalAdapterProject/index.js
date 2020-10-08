@@ -1,4 +1,5 @@
 const { Requester, Validator } = require('@chainlink/external-adapter')
+const TikTokScraper = require('tiktok-scraper')
 
 // Define custom error scenarios for the API.
 // Return true for the adapter to retry.
@@ -34,7 +35,7 @@ const createRequest = (input, callback) => {
   // This is where you would add method and headers
   // you can add method like GET or POST and add it to the config
   // The default is GET requests
-  // method = 'get' 
+  // method = 'get'
   // headers = 'headers.....'
   const config = {
     url,
@@ -54,6 +55,64 @@ const createRequest = (input, callback) => {
     .catch(error => {
       callback(500, Requester.errored(jobRunID, error))
     })
+}
+
+const createRequest2 = (input, callback) => {
+  const customParams = {
+    videoUrl: ['videoUrl'],
+    endpoint: false
+  }
+  // The Validator helps you validate the Chainlink request data
+  const validator = new Validator(callback, input, customParams)
+  const jobRunID = validator.validated.id
+  // const endpoint = validator.validated.data.endpoint || 'price'
+  // const url = `https://min-api.cryptocompare.com/data/${endpoint}`
+  const videoUrl = validator.validated.data.videoUrl;
+  // const tsyms = validator.validated.data.quote.toUpperCase();
+
+  (async () => {
+    try {
+      const videoData = await TikTokScraper.getVideoMeta(videoUrl, null)
+      console.log('VideoData', videoData)
+      const response = {
+        data: {
+          result: videoData
+        }
+      }
+      callback(200, Requester.success(jobRunID, response))
+    } catch (error) {
+      console.log(error)
+      callback(500, Requester.errored(jobRunID, error))
+    }
+  })()
+  // const params = {
+  //   fsym,
+  //   tsyms
+  // }
+
+  // This is where you would add method and headers
+  // you can add method like GET or POST and add it to the config
+  // The default is GET requests
+  // method = 'get'
+  // headers = 'headers.....'
+  // const config = {
+  //   url,
+  //   params
+  // }
+
+  // The Requester allows API calls be retry in case of timeout
+  // or connection failure
+  // Requester.request(config, customError)
+  //   .then(response => {
+  //     // It's common practice to store the desired value at the top-level
+  //     // result key. This allows different adapters to be compatible with
+  //     // one another.
+  //     response.data.result = Requester.validateResultNumber(response.data, [tsyms])
+  //     callback(response.status, Requester.success(jobRunID, response))
+  //   })
+  //   .catch(error => {
+  //     callback(500, Requester.errored(jobRunID, error))
+  //   })
 }
 
 // This is a wrapper to allow the function to work with
@@ -87,3 +146,4 @@ exports.handlerv2 = (event, context, callback) => {
 // This allows the function to be exported for testing
 // or for running in express
 module.exports.createRequest = createRequest
+module.exports.createRequest2 = createRequest2
