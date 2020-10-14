@@ -19,8 +19,8 @@ app.post('/', (req, res) => {
 app.post('/likes', (req, res) => {
   console.log('POST Data: ', req.body)
   createRequest2(req.body, (status, result) => {
-    console.log('Result: ', result.result.diggCount)
-    res.status(status).json(result.result.diggCount)
+    console.log('Result: ', result)
+    res.status(status).json(result)
   })
 })
 

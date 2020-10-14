@@ -19,13 +19,20 @@ const customParams = {
 }
 
 const createRequest = (input, callback) => {
+  input = {
+    id: 0,
+    data: {
+      from: 'ETH',
+      to: 'USD'
+    }
+  }
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
   const endpoint = validator.validated.data.endpoint || 'price'
   const url = `https://min-api.cryptocompare.com/data/${endpoint}`
-  const fsym = validator.validated.data.base.toUpperCase()
-  const tsyms = validator.validated.data.quote.toUpperCase()
+  const fsym = 'ETH' || validator.validated.data.base.toUpperCase()
+  const tsyms = 'USD' || validator.validated.data.quote.toUpperCase()
 
   const params = {
     fsym,
@@ -65,60 +72,30 @@ const createRequest2 = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
-  // const endpoint = validator.validated.data.endpoint || 'price'
-  // const url = `https://min-api.cryptocompare.com/data/${endpoint}`
   const videoUrl = validator.validated.data.videoUrl;
-  // const tsyms = validator.validated.data.quote.toUpperCase();
 
   (async () => {
     try {
       const videoData = await TikTokScraper.getVideoMeta(videoUrl, null)
-      console.log('VideoData', videoData)
+      console.log('VideoData', videoData.diggCount)
       const response = {
         data: {
-          result: videoData
-        }
+          result: videoData.diggCount
+        },
+        status: 'completed'
       }
+      // response.data.result = Requester.validateResultNumber(response.data, ['result'])
       callback(200, Requester.success(jobRunID, response))
     } catch (error) {
-      console.log(error)
       callback(500, Requester.errored(jobRunID, error))
     }
   })()
-  // const params = {
-  //   fsym,
-  //   tsyms
-  // }
-
-  // This is where you would add method and headers
-  // you can add method like GET or POST and add it to the config
-  // The default is GET requests
-  // method = 'get'
-  // headers = 'headers.....'
-  // const config = {
-  //   url,
-  //   params
-  // }
-
-  // The Requester allows API calls be retry in case of timeout
-  // or connection failure
-  // Requester.request(config, customError)
-  //   .then(response => {
-  //     // It's common practice to store the desired value at the top-level
-  //     // result key. This allows different adapters to be compatible with
-  //     // one another.
-  //     response.data.result = Requester.validateResultNumber(response.data, [tsyms])
-  //     callback(response.status, Requester.success(jobRunID, response))
-  //   })
-  //   .catch(error => {
-  //     callback(500, Requester.errored(jobRunID, error))
-  //   })
 }
 
 // This is a wrapper to allow the function to work with
 // GCP Functions
 exports.gcpservice = (req, res) => {
-  createRequest(req.body, (statusCode, data) => {
+  createRequest2(req.body, (statusCode, data) => {
     res.status(statusCode).send(data)
   })
 }
@@ -127,6 +104,9 @@ exports.gcpservice = (req, res) => {
 // AWS Lambda
 exports.handler = (event, context, callback) => {
   createRequest(event, (statusCode, data) => {
+    data = {
+      data
+    }
     callback(null, data)
   })
 }
@@ -134,10 +114,10 @@ exports.handler = (event, context, callback) => {
 // This is a wrapper to allow the function to work with
 // newer AWS Lambda implementations
 exports.handlerv2 = (event, context, callback) => {
-  createRequest(JSON.parse(event.body), (statusCode, data) => {
+  createRequest2(JSON.parse(JSON.stringify(event)), (statusCode, data) => {
     callback(null, {
       statusCode: statusCode,
-      body: JSON.stringify(data),
+      body: data,
       isBase64Encoded: false
     })
   })
