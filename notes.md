@@ -52,10 +52,44 @@ Already installed in chainlink software, http get, copy, json parse, etc
 3. Run a node yourself
    
 # Run a node
+## GCP
+1. Go to [ComputeEngine](https://console.cloud.google.com/compute/)
+2. Create VM instance
+   1. Machine type: 2 cores, 8 GB memory
+   2. Ubuntu 18, SSD persistent disk
+   3. Allow HTTP and HTTPS
+3. Go to [Api & Services > Library](https://console.cloud.google.com/apis/library)
+   1. Enable [Service Networking API](https://console.cloud.google.com/apis/library/servicenetworking.googleapis.com?q=service%20networking%20api&id=3be53c3f-b334-40eb-94f0-66b55195ed50)
+4. Setup Databases
+   1. Go to [SQL](https://console.cloud.google.com/sql/)
+   2. Create instance
+   3. Choose PostgreSQL
+   4. Instance Id `chainlink-instance`
+   5. Configuration options
+      1. Connectivity: Check Private API
+      2. Backups, recovery, and high availability: Set to High availability 
+   6. Hit Create
+   7. On production (Do a couple of permissions, who connect to the DB..)
+   8. Go to Users
+      1. Add User Account
+      2. User `chainlink-db-user`
+      3. Add
+   9. Go to Databases
+      1.  Create DB
+      2.  Name: `chainlink-kovan-db`
+5.  Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/quickstart). To SSH tunnel into our google cloud VM and view the GUI.
+6.  Open CMD on C:\Users\xavis\AppData\Local\Google\Cloud SDK     
+```bash
+  gcloud config set project sponsorproject
+
+  gcloud compute --project "sponsorproject" ssh --zone "us-central1-a" "chainlink-kovan" -- -L 6688:localhost:6688
+```
+---
   1. https://docs.chain.link/docs/running-a-chainlink-node#config
   2. [AWS, Docker](https://medium.com/@linkblog/set-up-a-chainlink-test-node-with-aws-ec2-fiews-and-docker-84334cbaf507)
   3. [GCP](https://www.youtube.com/watch?v=t9Uknfw27IU)
 * [Get Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
+* [Install linux kernel](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel)
 * 
 
 # Serverless architecture (external adapter)
