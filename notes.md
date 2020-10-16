@@ -51,8 +51,11 @@ Already installed in chainlink software, http get, copy, json parse, etc
 2. Ask a node operator to host it. (Go to Discord platform)
 3. Run a node yourself
    
-# Run a node
-## GCP
+# Run a node - ✅
+https://docs.chain.link/docs/running-a-chainlink-node#config
+
+https://www.youtube.com/watch?v=t9Uknfw27IU
+## GCP ✅
 1. Go to [ComputeEngine](https://console.cloud.google.com/compute/)
 2. Create VM instance
    1. Machine type: 2 cores, 8 GB memory
@@ -80,26 +83,37 @@ Already installed in chainlink software, http get, copy, json parse, etc
 5.  Install [Google Cloud SDK](https://cloud.google.com/sdk/docs/quickstart). To SSH tunnel into our google cloud VM and view the GUI.
 6.  Open CMD on C:\Users\xavis\AppData\Local\Google\Cloud SDK     
 ```bash
-  gcloud config set project sponsorproject
+  > gcloud config set project sponsorproject
 
-  gcloud compute --project "sponsorproject" ssh --zone "us-central1-a" "chainlink-kovan" -- -L 6688:localhost:6688
+  > gcloud compute --project "sponsorproject" ssh --zone "us-central1-a" "chainlink-kovan" -- -L 6688:localhost:6688
 ```
----
-  1. https://docs.chain.link/docs/running-a-chainlink-node#config
-  2. [AWS, Docker](https://medium.com/@linkblog/set-up-a-chainlink-test-node-with-aws-ec2-fiews-and-docker-84334cbaf507)
-  3. [GCP](https://www.youtube.com/watch?v=t9Uknfw27IU)
-* [Get Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
-* [Install linux kernel](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel)
-* 
+7. PuTTy is opened
+8. Follow [Chainlink docu](https://docs.chain.link/docs/running-a-chainlink-node)
+9. Set Ethereum Client with external provider
+   1.  Login in [Infura](https://infura.io/)
+   2.  Create a [Project](https://infura.io/dashboard/ethereum)
+   3.  Copy wss endpoint for the websocket
+```
+echo "ETH_URL=wss://kovan.infura.io/ws/v3/2d964324c5e64933b885b9c03abdd6bc" >> ~/.chainlink-kovan/.env
+```
 
-# Serverless architecture (external adapter)
+10. Set remote DB config. (The one made in GCP)
+```
+echo "DATABASE_URL=postgresql://chainlink-db-user:password@10.96.16.3:5432/chainlink-kovan-db" >> ~/.chainlink-kovan/.env
+```
+11. Start the chainlink node
+```
+cd ~/.chainlink-kovan && docker run -p 6688:6688 -v ~/.chainlink-kovan:/chainlink -it --env-file=.env smartcontract/chainlink local n
+```
+
+# Build External Adapter - ✅
 It starts a server when the url is called and turned off once finished the request
 * https://www.youtube.com/watch?v=GIu67qMAp7M
 * http://blog.hubwiz.com/2020/01/24/chainlink-tutorial/
 * https://www.programmersought.com/article/38194416078/
 
 
-## [GCP](http://cloud.google.com/)
+## [GCP](http://cloud.google.com/) ✅
 1. Set up billing account
 1. Create Function
 2. Configuration: TriggerType: `HTTP`, `Allow unauthenticated invocations`
