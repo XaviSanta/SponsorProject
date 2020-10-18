@@ -21,14 +21,16 @@ pragma solidity ^0.6.0;
 import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.6/ChainlinkClient.sol";
 ```
 3. JobId and Oracle Address
-``` javascript
-function requestPrice(address _oracle, string memory _jobId, string memory _videoUrl) public
-    {
-      Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), address(this), this.fulfill.selector);
-      req.add("videoUrl", _videoUrl);
-      req.add("path", "likesCount");
-      sendChainlinkRequestTo(_oracle, req, oraclePayment);
-    }
+```js
+  function requestLikes(address _oracle, string _jobId)
+    public
+    onlyOwner
+  {
+    Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), this, this.fulfillLikes.selector);
+    req.add("videoUrl", "https://www.tiktok.com/@tiktok/video/6881450806688664838");
+    req.add("copyPath", "result.likesCount");
+    sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
+  }
 ```
 
 ## Call after period of time
@@ -51,7 +53,7 @@ Already installed in chainlink software, http get, copy, json parse, etc
 2. Ask a node operator to host it. (Go to Discord platform)
 3. Run a node yourself
    
-# Run a node - ✅
+# Run a node ✅
 https://docs.chain.link/docs/running-a-chainlink-node#config
 
 https://www.youtube.com/watch?v=t9Uknfw27IU
@@ -105,26 +107,53 @@ echo "DATABASE_URL=postgresql://chainlink-db-user:password@10.96.16.3:5432/chain
 ```
 cd ~/.chainlink-kovan && docker run -p 6688:6688 -v ~/.chainlink-kovan:/chainlink -it --env-file=.env smartcontract/chainlink local n
 ```
+12. Open localhost:6688
 
-# Build External Adapter - ✅
-It starts a server when the url is called and turned off once finished the request
-* https://www.youtube.com/watch?v=GIu67qMAp7M
-* http://blog.hubwiz.com/2020/01/24/chainlink-tutorial/
-* https://www.programmersought.com/article/38194416078/
-
-
+# Create an External Adapter ✅
 ## [GCP](http://cloud.google.com/) ✅
 1. Set up billing account
 1. Create Function
 2. Configuration: TriggerType: `HTTP`, `Allow unauthenticated invocations`
 3. [Code](https://github.com/XaviSanta/ExternalAdatper-TikTok): Call Scrapper TikTok and return num likes
 4. Test -> POST: 
-   1. https://europe-west1-sponsorproject.cloudfunctions.net/function-1
+   1. https://europe-west3-sponsorproject.cloudfunctions.net/external-adapter-tiktok1
    2. Body:
    `{id: 0, data: {videoUrl: 'https://www.tiktok.com/@tiktok/video/6800111723257941253'}}`
 
 ## AWS 
 * Aws was giving me problems maybe ill try it again
+
+
+# Add the External Adapter to your node  ✅
+Follow instructions to add Internal Adapter: https://docs.chain.link/docs/fulfilling-requests#config
+## Job Example
+```
+{
+  "initiators": [
+    {
+      "type": "runlog",
+      "params": {
+        "address": "YOUR_ORACLE_CONTRACT_ADDRESS"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "type": "tiktok"
+    },
+    {
+      "type": "copy"
+    },
+    {
+      "type": "ethuint256"
+    },
+    {
+      "type": "ethtx"
+    }
+  ]
+}
+```
+The oracle contract address: 0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54
 
 # TikTok API
 * [Repo](https://github.com/drawrowfly/tiktok-scraper)
@@ -136,7 +165,7 @@ It starts a server when the url is called and turned off once finished the reque
   * GCP
     * It works: 
     * POST: 
-       1. https://europe-west1-sponsorproject.cloudfunctions.net/function-1
+       1. https://europe-west3-sponsorproject.cloudfunctions.net/external-adapter-tiktok
        2. Body:
        `{id: 0, data: {videoUrl: 'https://www.tiktok.com/@tiktok/video/6800111723257941253'}}`
   * Heroku
