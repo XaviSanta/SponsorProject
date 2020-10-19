@@ -9,9 +9,9 @@ https://ethereum.org/en/developers/docs/dapps/
   * Change remix to `http://`
   * Set environment to `Injected Web3`
   * Get some ETH https://faucet.kovan.network/ , https://faucet.ropsten.be/, http://faucet.bitfwd.xyz/, https://faucet.kyber.network/
-  * Get some Link Test Tokens https://ropsten.chain.link/
+  * Get some Link Test Tokens https://kovan.chain.link/
 ## Oracle - Call adapter
-Ropsten not working 15/10/20. I'll try Kovan instead
+Ropsten is currently broken 15/10/20. I'm going to use Kovan.
 1. Import the contracts needed to use ChainLink
 ```javascript
 pragma solidity ^0.6.0;
@@ -32,26 +32,29 @@ import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.6/Cha
     sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
   }
 ```
-
+* `fullfillLikes` is the callback function
+* `videoUrl`: is the parameter for the tiktok adapter. It returns a JSON object with information about the video requested.
+* `copyPath`: is the parameter for the copy adapter. This adapter returns the value of the key requested. It is extracted from a JSON object. In this case the JSON is the result body data from the HttpPost is made in the tiktok EA. 
 ## Call after period of time
 [Chainlink alarm clock](https://docs.chain.link/docs/chainlink-alarm-clock)
 
 # Oracle - Execute Code offChain
 ### [Delphi](https://delphi.systems/)
 ### [Oraclize](https://docs.provable.xyz/#background)
-### [ChainLink](https://docs.chain.link/)
+### **[ChainLink](https://docs.chain.link/)** - *I will use this one*
 
 # Adapters - Chainlink
-* [Core Adapters](https://www.youtube.com/watch?v=AtHp7me2Yks)
+* [Core Adapters](https://docs.chain.link/docs/adapters)
 Already installed in chainlink software, http get, copy, json parse, etc
-* External Adapters: build own external functinoality, can run off-chain. (Opensource packages for chainlink nodes.)
+* External Adapters (EA): build own external functionality, can run off-chain. (Opensource packages for chainlink nodes.)
   * [Template](https://github.com/thodges-gh/CL-EA-NodeJS-Template)
   * [Examples](https://github.com/smartcontractkit/external-adapters-js)
   * Call the Likes API 
   * HOST external adapter on node that can put the data into the smart contract
-1. Add it to a node/adapter listing service, market.link
-2. Ask a node operator to host it. (Go to Discord platform)
-3. Run a node yourself
+
+If we want to use our EA in any smart contract. We have 2 options:
+1. Ask a node operator to host it. (Go to Discord platform)
+2. **Run a node yourself** - *I will go with that one to learn more about the project and have more control on what I do so then I don't need to depend from another person to debug my transaction.*
    
 # Run a node ✅
 https://docs.chain.link/docs/running-a-chainlink-node#config
@@ -107,7 +110,7 @@ echo "DATABASE_URL=postgresql://chainlink-db-user:password@10.96.16.3:5432/chain
 ```
 cd ~/.chainlink-kovan && docker run -p 6688:6688 -v ~/.chainlink-kovan:/chainlink -it --env-file=.env smartcontract/chainlink local n
 ```
-12. Open localhost:6688
+12. Open [localhost:6688](http://localhost:6688/)
 
 # Create an External Adapter ✅
 ## [GCP](http://cloud.google.com/) ✅
@@ -125,7 +128,21 @@ cd ~/.chainlink-kovan && docker run -p 6688:6688 -v ~/.chainlink-kovan:/chainlin
 
 
 # Add the External Adapter to your node  ✅
-Follow instructions to add Internal Adapter: https://docs.chain.link/docs/fulfilling-requests#config
+Follow instructions to fulfill the requests from contracts:
+https://docs.chain.link/docs/fulfilling-requests#config
+* Deploy `Oracle.sol`. 
+```js
+pragma solidity 0.4.24;
+
+import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.4/Oracle.sol";
+```
+With `0xa36085F69e2889c224210F603D836748e7dC0088` for Kovan.
+
+This contract will receive the payments from the jobs done. The LINKs token can be withdrawn only by us.
+* And Set fullfillment permission to your Node. The address of your node is in `Configuration > ACCOUNT_ADDRESS`
+
+Now our Node can handle jobs.
+My oracle contract addr: `0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54`
 ## Job Example
 ```
 {
@@ -153,7 +170,6 @@ Follow instructions to add Internal Adapter: https://docs.chain.link/docs/fulfil
   ]
 }
 ```
-The oracle contract address: 0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54
 
 # TikTok API
 * [Repo](https://github.com/drawrowfly/tiktok-scraper)

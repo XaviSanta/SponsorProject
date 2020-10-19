@@ -3,7 +3,7 @@ pragma solidity 0.4.24;
 import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.4/ChainlinkClient.sol";
 import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.4/vendor/Ownable.sol";
 
-contract TikTokOffer is ChainlinkClient, Ownable {
+contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     uint256 constant private ORACLE_PAYMENT = 1 * LINK; // Price per job
     address constant private ORACLE_ADDRESS = 0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54;
     string constant private JOB_ID = "98e390a5427946cfa113a14dbe839b21"; // Likes < uint256
