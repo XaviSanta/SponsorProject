@@ -8,7 +8,7 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     address constant private ORACLE_ADDRESS = 0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54;
     string constant private JOB_ID = "98e390a5427946cfa113a14dbe839b21"; // Likes < uint256
     address owner;
-    string song;
+    uint256 song;
     uint256 limitDays;
     uint256 minLikes;
     
@@ -28,9 +28,11 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
         uint256 indexed likes
     );
     
-    constructor (string memory _song, uint _limitDays, uint _minLikes)
-    public payable Ownable() 
-    {
+    constructor (
+        uint256  _song,
+        uint256 _limitDays,
+        uint256 _minLikes
+        ) public payable Ownable() {
         setPublicChainlinkToken();
         owner = msg.sender;
         song = _song;
@@ -41,20 +43,32 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     function getBalance() public view returns (uint){
         return address(this).balance;
     }
+    function getMusicId() public view returns (uint256){
+        return song;
+    }
     
     /**
      * Allows users to introduce their VideoUrl and be able to participate 
      */
     function applyToOffer(string memory _videoUrl) public {
-        // TODO: Check videoURL isnt already listed
-        // TODO: Check musicId
-        // TODO: Add video to the list
-        // appliers[msg.sender] = VideoApplications(_videoURL, 0);
-        
         applier = msg.sender;
-        requestLikes(ORACLE_ADDRESS, JOB_ID, _videoUrl); // RODO: Change with 'check music id'
+        checkMusicUsed(ORACLE_ADDRESS, JOB_ID, _videoUrl);
+        // ALternative: Add all the videos to the list and check them all on the limit day with the minlikes and return a bytes32 with the info needed
     }
     
+    function checkMusicUsed(address _oracle, string _jobId, string _videoUrl) public onlyOwner {
+        Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), this, this.fulfillMusicId.selector);
+        req.add("videoUrl", _videoUrl);
+        req.add("copyPath", "result.musicMeta.musicId");
+        sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
+    }
+    
+    function fulfillMusicId(bytes32 _requestId, uint256 _musicId) public recordChainlinkFulfillment(_requestId) {
+        require(song == _musicId, "Music Id doesn't match");
+        // TODO: Add video to the list?
+    }
+
+
     /**
      * Asks for the number of likes and calls the callback function once finished with the result
      * 
