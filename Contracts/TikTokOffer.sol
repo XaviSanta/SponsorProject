@@ -1,9 +1,9 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.6.0;
 
-import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.4/ChainlinkClient.sol";
-import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.4/vendor/Ownable.sol";
+// import "https://github.com/smartcontractkit/chainlink/evm-contracts/src/v0.6/ChainlinkClient.sol"; // Remix dev
+import "@chainlink/contracts/src/v0.6/ChainlinkClient.sol"; //Local Dev (npm)
 
-contract SponsorOffer_Divide is ChainlinkClient, Ownable {
+contract SponsorOffer_Divide is ChainlinkClient {
     uint256 constant private ORACLE_PAYMENT = 1 * LINK; // Price per job
     address constant private ORACLE_ADDRESS = 0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54;
     string constant private JOB_ID = "98e390a5427946cfa113a14dbe839b21"; // Likes < uint256
@@ -14,7 +14,7 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     
     // for testing:
     uint256 likesCount;
-    address applier;
+    address payable applier;
     
     mapping(address => VideoApplications[]) appliers;
     
@@ -32,7 +32,7 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
         uint256  _song,
         uint256 _limitDays,
         uint256 _minLikes
-        ) public payable Ownable() {
+        ) public payable  {
         setPublicChainlinkToken();
         owner = msg.sender;
         song = _song;
@@ -53,11 +53,11 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     function applyToOffer(string memory _videoUrl) public {
         applier = msg.sender;
         checkMusicUsed(ORACLE_ADDRESS, JOB_ID, _videoUrl);
-        // ALternative: Add all the videos to the list and check them all on the limit day with the minlikes and return a bytes32 with the info needed
+                // ALternative: Add all the videos to the list and check them all on the limit day with the minlikes and return a bytes32 with the info needed
     }
     
-    function checkMusicUsed(address _oracle, string _jobId, string _videoUrl) public onlyOwner {
-        Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), this, this.fulfillMusicId.selector);
+    function checkMusicUsed(address _oracle, string memory _jobId, string memory _videoUrl) public  {
+        Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), address(this), this.fulfillMusicId.selector);
         req.add("videoUrl", _videoUrl);
         req.add("copyPath", "result.musicMeta.musicId");
         sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
@@ -66,6 +66,7 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
     function fulfillMusicId(bytes32 _requestId, uint256 _musicId) public recordChainlinkFulfillment(_requestId) {
         require(song == _musicId, "Music Id doesn't match");
         // TODO: Add video to the list?
+        transferFunds();
     }
 
 
@@ -78,8 +79,8 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
      *      JobId: Id of the Job we are willing to return - 98e390a5427946cfa113a14dbe839b21
      *      VideoUrl: Link of the tiktok video we want to extract info from
      */ 
-    function requestLikes(address _oracle, string _jobId, string _videoUrl) public onlyOwner {
-        Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), this, this.fulfillLikesCount.selector);
+    function requestLikes(address _oracle, string memory _jobId, string memory _videoUrl) public  {
+        Chainlink.Request memory req = buildChainlinkRequest(stringToBytes32(_jobId), address(this), this.fulfillLikesCount.selector);
         req.add("videoUrl", _videoUrl);
         req.add("copyPath", "result.likesCount");
         sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
@@ -120,12 +121,12 @@ contract SponsorOffer_Divide is ChainlinkClient, Ownable {
         }
     }
     
-    function withdrawLink() public onlyOwner {
+    function withdrawLink() public  {
         LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
         require(link.transfer(msg.sender, link.balanceOf(address(this))), "Unable to transfer");
     }
     
-    function withdrawEth() public onlyOwner {
+    function withdrawEth() public  {
         msg.sender.transfer(getBalance());
     }
     
