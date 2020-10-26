@@ -99,7 +99,7 @@ https://www.youtube.com/watch?v=t9Uknfw27IU
    2.  Create a [Project](https://infura.io/dashboard/ethereum)
    3.  Copy wss endpoint for the websocket
 ```
-echo "ETH_URL=wss://kovan.infura.io/ws/v3/2d964324c5e64933b885b9c03abdd6bc" >> ~/.chainlink-kovan/.env
+echo "ETH_URL="wss://kovan.infura.io/v3/<INFURA_PROJECT_ID>" >> ~/.chainlink-kovan/.env
 ```
 
 10. Set remote DB config. (The one made in GCP)
@@ -186,3 +186,43 @@ My oracle contract addr: `0xfa42eB0C75B4593b4377D19b6f0edB4Abc705D54`
        `{id: 0, data: {videoUrl: 'https://www.tiktok.com/@tiktok/video/6800111723257941253'}}`
   * Heroku
   * others
+
+# DApp
+Template
+```
+truffle unbox smartcontractkit/box
+or
+truffle unbox Quintor/angular-truffle-box
+or 
+truffle unbox react
+```
+https://blog.chain.link/build-defi-yield-farming-application-with-chainlink/
+
+```
+Yarn
+Nodejs
+Truffle
+ETH Wallet (mith mnemonic un env variable)
+RPC_URL
+```
+https://www.trufflesuite.com/tutorials/deploying-to-the-live-network
+
+https://www.trufflesuite.com/tutorials/using-infura-custom-provider
+
+Contract abstractions are used to interactuate with the contracts with js.
+## Use a contract at a specific address
+If you already have an address for a contract, you can create a new abstraction to represent the contract at that address.
+``` js
+let specificInstance = await MetaCoin.at("0x1234...");
+```
+## Create a new instance
+```js
+let newInstance = await MetaCoin.new()
+```
+
+```
+truffle migrate --network kovan
+```
+```
+npm i @truffle/hdwallet-provider
+```
