@@ -18,5 +18,15 @@ module.exports = {
       // TODO: Change it to the corresponding id
       network_id: '*'
     }
+  },
+  compilers: {
+    solc: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      },
+      evmVersion: "petersburg",
+      version: "0.6.6"
+    }
   }
 };

@@ -15,9 +15,9 @@ export class Web3Service {
   public accountsObservable = new Subject<string[]>();
 
   constructor() {
-    window.addEventListener('load', (event) => {
-      this.bootstrapWeb3();
-    });
+    // window.addEventListener('load', (event) => {
+    //   this.bootstrapWeb3();
+    // });
   }
 
   public bootstrapWeb3() {
@@ -36,7 +36,7 @@ export class Web3Service {
       this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
     }
 
-    setInterval(() => this.refreshAccounts(), 100);
+    setInterval(() => this.refreshAccounts(), 1000);
   }
 
   public async artifactsToContract(artifacts) {

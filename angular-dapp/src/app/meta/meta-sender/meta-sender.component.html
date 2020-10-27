@@ -1,9 +1,22 @@
+<button (click)="connectWallet()">
+  Connect Wallet
+</button>
+<button (click)="set()">
+  Set Storage
+</button>
 <mat-card>
   <mat-card-header>Balance</mat-card-header>
   <mat-card-content>
     <mat-form-field id="address-selector" class="address-field">
-      <mat-select name="account" (selectionChange)="refreshBalance()" [(value)]="model.account" placeholder="Address">
-        <mat-option *ngFor="let account of accounts" [value]="account">{{account}}</mat-option>
+      <mat-select
+        name="account"
+        (selectionChange)="refreshBalance()"
+        [(value)]="model.account"
+        placeholder="Address">
+        <mat-option *ngFor="let account of accounts"
+          [value]="account">
+          {{account}}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 

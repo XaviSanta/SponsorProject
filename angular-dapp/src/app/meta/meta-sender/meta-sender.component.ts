@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Web3Service} from '../../util/web3.service';
+import { Component, OnInit } from '@angular/core';
+import { Web3Service } from '../../util/web3.service';
 import { MatSnackBar } from '@angular/material';
 
 declare let require: any;
-const metacoin_artifacts = require('../../../../build/contracts/MetaCoin.json');
+const simpleStorage_artifacts = require('../../../../build/contracts/SimpleStorage.json');
 
 @Component({
   selector: 'app-meta-sender',
@@ -23,26 +23,32 @@ export class MetaSenderComponent implements OnInit {
 
   status = '';
 
-  constructor(private web3Service: Web3Service, private matSnackBar: MatSnackBar) {
-    console.log('Constructor: ' + web3Service);
+  constructor(
+    private web3Service: Web3Service,
+    private matSnackBar: MatSnackBar,
+  ) {
+    console.log('Constructor: ', web3Service);
   }
 
   ngOnInit(): void {
-    console.log('OnInit: ' + this.web3Service);
+    console.log('OnInit: ', this.web3Service);
     console.log(this);
     this.watchAccount();
-    this.web3Service.artifactsToContract(metacoin_artifacts)
-      .then((MetaCoinAbstraction) => {
-        this.MetaCoin = MetaCoinAbstraction;
-        this.MetaCoin.deployed().then(deployed => {
-          console.log(deployed);
-          deployed.Transfer({}, (err, ev) => {
-            console.log('Transfer event came in, refreshing balance');
-            this.refreshBalance();
-          });
-        });
+  }
 
-      });
+  async set() {
+    const simpleStorageAbstraction = await this.web3Service.artifactsToContract(simpleStorage_artifacts);
+    console.log('simpleStorage:', simpleStorageAbstraction);
+    const simpleStorageInstance = await simpleStorageAbstraction.deployed();
+    console.log('simpleStorageInstance:', simpleStorageInstance);
+    await simpleStorageInstance.set(89, { from: this.accounts[0] });
+    const storedData = await simpleStorageInstance.get.call();
+    console.log('storedData:', storedData);
+    this.refreshBalance();
+  }
+
+  connectWallet(): void {
+    this.web3Service.bootstrapWeb3();
   }
 
   watchAccount() {
