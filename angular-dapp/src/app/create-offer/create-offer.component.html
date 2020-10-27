@@ -1,0 +1,55 @@
+<mat-card class="offer-details">
+  <mat-card-header>
+    <mat-card-title>Offer #1</mat-card-title>
+    <mat-card-subtitle>Xavi Santamaria</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="offer-form" (ngSubmit)="createContract()">
+
+      <mat-form-field class="full-width">
+        <mat-label>Song</mat-label>
+        <input matInput
+          placeholder="Ex. Pizza"
+          [(ngModel)]="song" name="song">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Limit Days</mat-label>
+        <input matInput
+          type="number"
+          [(ngModel)]="limitDays" name="limitDays"
+          placeholder="Ex. Pizza">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Min Likes</mat-label>
+        <input matInput
+          type="number"
+          [(ngModel)]="minLikes" name="minLikes"
+          placeholder="Ex. Pizza">
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>Reward Value</mat-label>
+        <input
+          matInput type="number"
+          [(ngModel)]="value" name="value"
+          placeholder="Ex. Pizza">
+        <span matSuffix>ETH</span>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button
+      type="submit"
+      (click)="createContract()"
+      color="primary">
+      Create Contract</button>
+  </mat-card-actions>
+</mat-card>
+<!-- <button mat-button
+  type="submit"
+  (click)="withdrawEth()"
+  color="primary">
+  withdrawEth
+</button> -->

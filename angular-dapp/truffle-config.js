@@ -15,8 +15,7 @@ module.exports = {
         return new HDWalletProvider(mnemonic, url)
         // return new HDWalletProvider(process.env.MNEMONIC, process.env.PUBLIC_URL)
       },
-      // TODO: Change it to the corresponding id
-      network_id: '*'
+      network_id: '42'
     }
   },
   compilers: {

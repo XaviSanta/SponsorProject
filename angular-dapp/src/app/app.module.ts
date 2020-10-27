@@ -14,10 +14,16 @@ import {
   MatInputModule,
   MatToolbarModule
 } from '@angular/material';
+import { CreateOfferComponent } from './create-offer/create-offer.component';
+import { ApplyOfferComponent } from './apply-offer/apply-offer.component';
+import { ListOffersComponent } from './list-offers/list-offers.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CreateOfferComponent,
+    ApplyOfferComponent,
+    ListOffersComponent
   ],
   imports: [
     BrowserAnimationsModule,

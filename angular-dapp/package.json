@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@chainlink/contracts": "^0.0.9",
     "@angular/animations": "8.2.0",
     "@angular/cdk": "^8.2.0",
     "@angular/common": "8.2.0",

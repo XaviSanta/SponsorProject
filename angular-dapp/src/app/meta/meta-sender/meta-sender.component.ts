@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Web3Service } from '../../util/web3.service';
 import { MatSnackBar } from '@angular/material';
 
-declare let require: any;
-const simpleStorage_artifacts = require('../../../../build/contracts/SimpleStorage.json');
+// declare let require: any;
+// const simpleStorage_artifacts = require('../../../../build/contracts/SimpleStorage.json');
+import simpleStorage_artifacts from '../../../../build/contracts/SimpleStorage.json';
 
 @Component({
   selector: 'app-meta-sender',
@@ -37,14 +38,20 @@ export class MetaSenderComponent implements OnInit {
   }
 
   async set() {
-    const simpleStorageAbstraction = await this.web3Service.artifactsToContract(simpleStorage_artifacts);
-    console.log('simpleStorage:', simpleStorageAbstraction);
-    const simpleStorageInstance = await simpleStorageAbstraction.deployed();
-    console.log('simpleStorageInstance:', simpleStorageInstance);
-    await simpleStorageInstance.set(89, { from: this.accounts[0] });
-    const storedData = await simpleStorageInstance.get.call();
-    console.log('storedData:', storedData);
-    this.refreshBalance();
+    try {
+      const simpleStorageAbstraction = await this.web3Service.artifactsToContract(simpleStorage_artifacts);
+      console.log('simpleStorage:', simpleStorageAbstraction);
+      const simpleStorageInstance = await simpleStorageAbstraction.deployed();
+      console.log('simpleStorageInstance:', simpleStorageInstance);
+      await simpleStorageInstance.set(89, { from: this.accounts[0] });
+      const storedData = await simpleStorageInstance.get.call();
+      console.log('storedData:', storedData);
+      this.model.balance = storedData.words[0];
+      this.refreshBalance();
+    } catch (e) {
+      console.log(e);
+      this.setStatus('Error sending coin; see log.');
+    }
   }
 
   connectWallet(): void {

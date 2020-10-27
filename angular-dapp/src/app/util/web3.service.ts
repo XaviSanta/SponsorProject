@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import Web3 from 'web3';
 declare let require: any;
-const Web3 = require('web3');
 const contract = require('@truffle/contract');
 
 declare let window: any;
@@ -20,13 +20,12 @@ export class Web3Service {
     // });
   }
 
-  public bootstrapWeb3() {
+  public async bootstrapWeb3() {
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.ethereum !== 'undefined') {
       // Use Mist/MetaMask's provider
-      window.ethereum.enable().then(() => {
-        this.web3 = new Web3(window.ethereum);
-      });
+      await window.ethereum.enable();
+      this.web3 = new Web3(window.ethereum);
     } else {
       console.log('No web3? You should consider trying MetaMask!');
 
@@ -49,7 +48,6 @@ export class Web3Service {
     const contractAbstraction = contract(artifacts);
     contractAbstraction.setProvider(this.web3.currentProvider);
     return contractAbstraction;
-
   }
 
   private async refreshAccounts() {

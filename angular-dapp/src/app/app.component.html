@@ -1,2 +1,12 @@
-<mat-toolbar color="primary">Sponsor Project</mat-toolbar>
-<app-meta-sender></app-meta-sender>
+<!-- <mat-toolbar color="primary">Sponsor Project</mat-toolbar> -->
+<!-- <app-meta-sender></app-meta-sender> -->
+Account: {{accounts[0]}}
+<button *ngIf="accounts.length == 0"
+ (click)="connectWallet()">
+  Connect Wallet
+</button>
+<!-- <app-list-offers></app-list-offers> -->
+<app-create-offer
+  [accounts]="accounts">
+</app-create-offer>
+<!-- <app-apply-offer></app-apply-offer> -->
