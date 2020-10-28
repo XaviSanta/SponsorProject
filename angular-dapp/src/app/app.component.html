@@ -5,15 +5,19 @@ Account: {{accounts[0]}}
   (click)="connectWallet()">
   Connect Wallet
 </button>
+
 <div *ngIf="accounts.length !== 0">
 
-  <app-list-offers
+  <!-- <app-list-offers
     [accounts]="accounts">
   </app-list-offers>
 
   <app-create-offer
     [accounts]="accounts">
-  </app-create-offer>
+  </app-create-offer> -->
 
 </div>
+
 <!-- <app-apply-offer></app-apply-offer> -->
+<router-outlet></router-outlet>
+

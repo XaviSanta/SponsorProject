@@ -1,8 +1,18 @@
 
-<app-apply-offer
+<button>
+  <a routerLink="/create" routerLinkActive="active">Create Offer</a>
+</button>
+
+<p>LIST Offers</p>
+<div>Offer #1<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
+<div>Offer #5<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
+<div>Offer #4<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
+<div>Offer #3<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
+
+<!-- <app-apply-offer
   [accounts]="accounts"
   song="6872036029340158726"
   limitDays="2"
   minLikes="2"
   contractAddress="0xD573c333107B6A39120397a66cBb5395f8B4174d"
-></app-apply-offer>
+></app-apply-offer> -->

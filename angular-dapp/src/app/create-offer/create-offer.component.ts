@@ -8,7 +8,7 @@ import { Web3Service } from '../util/web3.service';
   styleUrls: ['./create-offer.component.css']
 })
 export class CreateOfferComponent implements OnInit {
-  @Input() accounts: string[];
+  accounts: string[];
   song: string;
   limitDays: number;
   minLikes: number;
@@ -29,7 +29,8 @@ export class CreateOfferComponent implements OnInit {
   }
 
   async createContract(e) {
-    console.log('Creating Contract', e);
+    await this.checkAccounts();
+    console.log('Creating Contract', this.accounts);
     console.log('Creating Contract', this.song, this.limitDays, this.minLikes, this.value);
     try {
       const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
@@ -44,6 +45,12 @@ export class CreateOfferComponent implements OnInit {
     }
   }
 
+  async checkAccounts() {
+    if (this.accounts === undefined) {
+      this.accounts = await this.web3Service.getAccounts();
+    }
+  }
+
   async withdrawEth() {
     try {
       const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
@@ -54,4 +61,10 @@ export class CreateOfferComponent implements OnInit {
       // this.setStatus('Error sending coin; see log.');
     }
   }
+
+  // goBack(): void {
+  //   if (this.navigated) {
+  //     window.history.back();
+  //   }
+  // }
 }

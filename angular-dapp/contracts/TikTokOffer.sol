@@ -46,6 +46,12 @@ contract TikTokOffer is ChainlinkClient {
     function getMusicId() public view returns (uint256){
         return song;
     }
+    function getMinLikes() public view returns (uint256){
+        return minLikes;
+    }
+    function getLimitDays() public view returns (uint256){
+        return limitDays;
+    }
 
     /**
      * Allows users to introduce their VideoUrl and be able to participate

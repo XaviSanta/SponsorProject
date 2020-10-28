@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
 import { Web3Service } from '../util/web3.service';
 
@@ -8,23 +9,49 @@ import { Web3Service } from '../util/web3.service';
   styleUrls: ['./apply-offer.component.css']
 })
 export class ApplyOfferComponent implements OnInit {
-  @Input() accounts: string[];
-  @Input() song: string;
-  @Input() limitDays: number;
-  @Input() minLikes: number;
-  @Input() contractAddress: string;
+  contractAddress: string;
+  accounts: string[];
+  song: string;
+  limitDays: number;
+  minLikes: number;
   videoUrl: string;
   value: string = 'NaN Refresh Value';
 
   constructor(
     private web3Service: Web3Service,
+    private route: ActivatedRoute,
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.accounts !== null && this.accounts !== undefined) {
       console.log('aaaa', this.accounts)
       this.setBalance();
     }
+
+    this.route.params.forEach((params: Params) => {
+      if (params['address'] !== undefined) {
+        this.contractAddress = params['address'];
+        // TODO: Get data
+        this.checkAccounts();
+        this.setInfo();
+        // this.heroService.getHero(id).subscribe(hero => (this.hero = hero));
+      }
+    });
+
+    this.watchAccount();
+  }
+
+  async checkAccounts() {
+    if (this.accounts === undefined) {
+      this.accounts = await this.web3Service.getAccounts();
+    }
+  }
+
+  watchAccount() {
+    this.web3Service.accountsObservable.subscribe((accounts) => {
+      this.accounts = accounts;
+      this.setInfo();
+    });
   }
 
   async applyOffer() {
@@ -38,6 +65,24 @@ export class ApplyOfferComponent implements OnInit {
       console.log(e);
       // this.setStatus('Error sending coin; see log.');
     }
+  }
+
+  async setInfo() {
+    // this.setSong();
+    // this.setLimitDays();
+    // this.minLikes();
+    try {
+      const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+      const tiktokInstance = await tikTokAbstraction.at(this.contractAddress);
+      this.value = await tiktokInstance.getBalance.call();
+      this.song = await tiktokInstance.getMusicId.call();
+      this.minLikes = await tiktokInstance.getMinLikes.call();
+
+    } catch(e) {
+      console.log(e);
+    }
+
+    // this.setBalance();
   }
 
   async setBalance() {

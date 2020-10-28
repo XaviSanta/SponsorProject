@@ -51,14 +51,7 @@ export class Web3Service {
   }
 
   private async refreshAccounts() {
-    const accs = await this.web3.eth.getAccounts();
-    console.log('Refreshing accounts');
-
-    // Get the initial account balance so it can be displayed.
-    if (accs.length === 0) {
-      console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-      return;
-    }
+    const accs = await this.getAccounts();
 
     if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
       console.log('Observed new accounts');
@@ -72,5 +65,18 @@ export class Web3Service {
 
   public async getBalance(address: string) {
     return await this.web3.eth.getBalance(address)
+  }
+
+  public async getAccounts() {
+    const accs = await this.web3.eth.getAccounts();
+    console.log('Refreshing accounts');
+
+    // Get the initial account balance so it can be displayed.
+    if (accs.length === 0) {
+      console.warn('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+      return;
+    }
+
+    return accs;
   }
 }
