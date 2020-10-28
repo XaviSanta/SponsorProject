@@ -9,6 +9,7 @@
       <mat-form-field class="full-width">
         <mat-label>Song</mat-label>
         <input matInput
+          required
           placeholder="Ex. Pizza"
           [(ngModel)]="song" name="song">
       </mat-form-field>
@@ -16,6 +17,7 @@
       <mat-form-field class="full-width">
         <mat-label>Limit Days</mat-label>
         <input matInput
+          required
           type="number"
           [(ngModel)]="limitDays" name="limitDays"
           placeholder="Ex. Pizza">
@@ -24,6 +26,7 @@
       <mat-form-field class="full-width">
         <mat-label>Min Likes</mat-label>
         <input matInput
+          required
           type="number"
           [(ngModel)]="minLikes" name="minLikes"
           placeholder="Ex. Pizza">
@@ -31,8 +34,9 @@
 
       <mat-form-field class="full-width">
         <mat-label>Reward Value</mat-label>
-        <input
-          matInput type="number"
+        <input matInput
+          required
+          type="number"
           [(ngModel)]="value" name="value"
           placeholder="Ex. Pizza">
         <span matSuffix>ETH</span>

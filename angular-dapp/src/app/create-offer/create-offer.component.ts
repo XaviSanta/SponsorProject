@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import simpleStorage_artifacts from '../../../build/contracts/SimpleStorage.json';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
 import { Web3Service } from '../util/web3.service';
 
@@ -20,6 +19,13 @@ export class CreateOfferComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.watchAccount();
+  }
+
+  watchAccount() {
+    this.web3Service.accountsObservable.subscribe((accounts) => {
+      this.accounts = accounts;
+    });
   }
 
   async createContract(e) {
@@ -27,12 +33,12 @@ export class CreateOfferComponent implements OnInit {
     console.log('Creating Contract', this.song, this.limitDays, this.minLikes, this.value);
     try {
       const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
-      const simpleStorageInstance =
+      const tiktokInstance =
         await tikTokAbstraction.new(this.song, this.limitDays, this.minLikes, {
           from: this.accounts[0],
           value: this.value,
         });
-      console.log('Contract created successfully at address: ', simpleStorageInstance.address);
+      console.log('Contract created successfully at address: ', tiktokInstance.address);
     } catch (error) {
       console.log('Error on creating contract: ', error);
     }
@@ -40,9 +46,9 @@ export class CreateOfferComponent implements OnInit {
 
   async withdrawEth() {
     try {
-      const simpleStorageAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
-      const simpleStorageInstance = await simpleStorageAbstraction.at('0x3e9Ba1C4C356B7C0733309aaaD159eEBDFD9f95a');
-      await simpleStorageInstance.withdrawEth({ from: this.accounts[0] });
+      const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+      const tiktokInstance = await tikTokAbstraction.at('0x3e9Ba1C4C356B7C0733309aaaD159eEBDFD9f95a');
+      await tiktokInstance.withdrawEth({ from: this.accounts[0] });
     } catch (e) {
       console.log(e);
       // this.setStatus('Error sending coin; see log.');

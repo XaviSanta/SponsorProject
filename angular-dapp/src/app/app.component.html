@@ -2,11 +2,18 @@
 <!-- <app-meta-sender></app-meta-sender> -->
 Account: {{accounts[0]}}
 <button *ngIf="accounts.length == 0"
- (click)="connectWallet()">
+  (click)="connectWallet()">
   Connect Wallet
 </button>
-<!-- <app-list-offers></app-list-offers> -->
-<app-create-offer
-  [accounts]="accounts">
-</app-create-offer>
+<div *ngIf="accounts.length !== 0">
+
+  <app-list-offers
+    [accounts]="accounts">
+  </app-list-offers>
+
+  <app-create-offer
+    [accounts]="accounts">
+  </app-create-offer>
+
+</div>
 <!-- <app-apply-offer></app-apply-offer> -->

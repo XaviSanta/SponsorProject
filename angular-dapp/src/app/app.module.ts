@@ -11,6 +11,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatToolbarModule
 } from '@angular/material';
@@ -33,6 +34,7 @@ import { ListOffersComponent } from './list-offers/list-offers.component';
     MatFormFieldModule,
     MatInputModule,
     MatToolbarModule,
+    MatIconModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

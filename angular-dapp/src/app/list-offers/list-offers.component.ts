@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-list-offers',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list-offers.component.css']
 })
 export class ListOffersComponent implements OnInit {
+  @Input() accounts: string[] = [];
 
   constructor() { }
 

@@ -217,7 +217,7 @@ let specificInstance = await MetaCoin.at("0x1234...");
 ```
 ## Create a new instance
 ```js
-let newInstance = await MetaCoin.new()
+let newInstance = await MetaCoin.new({from: '0x...'})
 ```
 
 ```
@@ -226,3 +226,10 @@ truffle migrate --network kovan
 ```
 npm i @truffle/hdwallet-provider
 ```
+```
+truffle console --network rinkeby
+```
+Maybe useful someday
+
+https://medium.com/web3connect/presenting-web3connect-a-single-web3-widget-for-dapps-ebbb2461ac7c
+

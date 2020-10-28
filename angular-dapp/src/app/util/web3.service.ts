@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import Web3 from 'web3';
 declare let require: any;
 const contract = require('@truffle/contract');
@@ -68,5 +68,9 @@ export class Web3Service {
     }
 
     this.ready = true;
+  }
+
+  public async getBalance(address: string) {
+    return await this.web3.eth.getBalance(address)
   }
 }
