@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
 import { Web3Service } from '../util/web3.service';
@@ -16,21 +17,28 @@ export class ApplyOfferComponent implements OnInit {
   minLikes: number;
   videoUrl: string;
   value: string = 'NaN Refresh Value';
+  tikTokAbstraction;
+  tiktokInstance;
 
   constructor(
     private web3Service: Web3Service,
     private route: ActivatedRoute,
+    private matSnackBar: MatSnackBar,
   ) {}
 
   async ngOnInit() {
+
     if (this.accounts !== null && this.accounts !== undefined) {
       console.log('aaaa', this.accounts)
       this.setBalance();
     }
 
-    this.route.params.forEach((params: Params) => {
+    this.route.params.forEach(async(params: Params) => {
       if (params['address'] !== undefined) {
         this.contractAddress = params['address'];
+        console.log(this.contractAddress)
+        this.tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+        this.tiktokInstance = await this.tikTokAbstraction.at(this.contractAddress);
         // TODO: Get data
         this.checkAccounts();
         this.setInfo();
@@ -39,6 +47,10 @@ export class ApplyOfferComponent implements OnInit {
     });
 
     this.watchAccount();
+  }
+
+  setStatus(status) {
+    this.matSnackBar.open(status, 'Close', {duration: 3000});
   }
 
   async checkAccounts() {
@@ -55,34 +67,23 @@ export class ApplyOfferComponent implements OnInit {
   }
 
   async applyOffer() {
-    console.log('VideoUrl: ', this.videoUrl);
-    console.log('acc: ', this.accounts);
     try {
-      const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
-      const tiktokInstance = await tikTokAbstraction.at(this.contractAddress);
-      await tiktokInstance.applyToOffer(this.videoUrl, { from: this.accounts[0] });
+      await this.tiktokInstance.applyToOffer(this.videoUrl, { from: this.accounts[0] });
     } catch (e) {
       console.log(e);
-      // this.setStatus('Error sending coin; see log.');
+      this.setStatus('Error on applying.');
     }
   }
 
-  async setInfo() {
-    // this.setSong();
-    // this.setLimitDays();
-    // this.minLikes();
+  setInfo() {
     try {
-      const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
-      const tiktokInstance = await tikTokAbstraction.at(this.contractAddress);
-      this.value = await tiktokInstance.getBalance.call();
-      this.song = await tiktokInstance.getMusicId.call();
-      this.minLikes = await tiktokInstance.getMinLikes.call();
-
+      this.tiktokInstance.getMusicId.call().then((value) => this.song = value);
+      this.tiktokInstance.getLimitDays.call().then((value) => this.limitDays = value);
+      this.tiktokInstance.getMinLikes.call().then((value) => this.minLikes = value);
+      this.tiktokInstance.getBalance.call().then((value) => this.value = value);
     } catch(e) {
       console.log(e);
     }
-
-    // this.setBalance();
   }
 
   async setBalance() {

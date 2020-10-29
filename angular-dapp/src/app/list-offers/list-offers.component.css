@@ -1,0 +1,18 @@
+/* Structure */
+.container-table {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+}
+table {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  max-width: 1500px;
+  margin: auto;
+}

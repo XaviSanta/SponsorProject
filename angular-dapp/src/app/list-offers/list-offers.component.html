@@ -4,10 +4,52 @@
 </button>
 
 <p>LIST Offers</p>
-<div>Offer #1<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
-<div>Offer #5<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
-<div>Offer #4<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
-<div>Offer #3<button (click)="gotoOffer('0xD573c333107B6A39120397a66cBb5395f8B4174d')">Offer1-apply</button></div>
+<div class="mat-elevation-z8 container-table">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Contract address </th>
+      <td mat-cell *matCellDef="let offer">
+        {{offer.address}}
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="song">
+      <th mat-header-cell *matHeaderCellDef> Song Url </th>
+      <td mat-cell *matCellDef="let offer"> {{offer.song}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="minLikes">
+      <th mat-header-cell *matHeaderCellDef> Min Likes </th>
+      <td mat-cell *matCellDef="let offer"> {{offer.minLikes}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> Reward </th>
+      <td mat-cell *matCellDef="let offer"> {{offer.value}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>  </th>
+      <td mat-cell *matCellDef="let offer">
+        <button mat-raised-button color="primary"
+          (click)="gotoOffer(offer.address)">
+          Apply
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+</div>
 
 <!-- <app-apply-offer
   [accounts]="accounts"
