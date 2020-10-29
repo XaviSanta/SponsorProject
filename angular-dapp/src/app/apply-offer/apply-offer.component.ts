@@ -19,7 +19,7 @@ export class ApplyOfferComponent implements OnInit {
   value: string = 'NaN Refresh Value';
   tikTokAbstraction;
   tiktokInstance;
-
+  subtitle: string = '';
   constructor(
     private web3Service: Web3Service,
     private route: ActivatedRoute,

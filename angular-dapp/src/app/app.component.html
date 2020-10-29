@@ -1,23 +1,38 @@
 <!-- <mat-toolbar color="primary">Sponsor Project</mat-toolbar> -->
-<!-- <app-meta-sender></app-meta-sender> -->
-Account: {{accounts[0]}}
-<button *ngIf="accounts.length == 0"
-  (click)="connectWallet()">
-  Connect Wallet
-</button>
+<mat-toolbar color="primary">
+  <a class="link-button"
+    mat-button
+    routerLink="/offers"
+    routerLinkActive="active">
+    <mat-icon>fast_forward</mat-icon>
+    Sponsor Project
+  </a>
 
-<div *ngIf="accounts.length !== 0">
+  <a class="link-button"
+    mat-button
+    routerLink="/offers"
+    routerLinkActive="active">
+    Offers
+  </a>
+  <a class="link-button"
+    mat-button
+    routerLink="/create"
+    routerLinkActive="active">
+    Create Offer
+  </a>
+  <span class="example-spacer"></span>
 
-  <!-- <app-list-offers
-    [accounts]="accounts">
-  </app-list-offers>
+  {{stringHelperService.convertWeiToEth(balance)}} ETH
 
-  <app-create-offer
-    [accounts]="accounts">
-  </app-create-offer> -->
+  {{stringHelperService.simplifyAddress(accounts[0])}}
+  <button mat-flat-button
+    color="accent"
+    *ngIf="accounts.length == 0"
+    (click)="connectWallet()">
+    Connect Wallet
+  </button>
 
-</div>
+</mat-toolbar>
 
-<!-- <app-apply-offer></app-apply-offer> -->
 <router-outlet></router-outlet>
 

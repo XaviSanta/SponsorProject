@@ -1,9 +1,3 @@
-
-<button>
-  <a routerLink="/create" routerLinkActive="active">Create Offer</a>
-</button>
-
-<p>LIST Offers</p>
 <div class="mat-elevation-z8 container-table">
   <table mat-table [dataSource]="dataSource">
 
@@ -11,7 +5,11 @@
     <ng-container matColumnDef="address">
       <th mat-header-cell *matHeaderCellDef>Contract address </th>
       <td mat-cell *matCellDef="let offer">
-        {{offer.address}}
+        <a mat-button
+          href="https://kovan.etherscan.io/address/{{offer.address}}"
+          target="_blank">
+          {{stringHelperService.simplifyAddress(offer.address)}}
+        </a>
       </td>
     </ng-container>
 
@@ -30,11 +28,11 @@
     <!-- Symbol Column -->
     <ng-container matColumnDef="value">
       <th mat-header-cell *matHeaderCellDef> Reward </th>
-      <td mat-cell *matCellDef="let offer"> {{offer.value}} </td>
+      <td mat-cell *matCellDef="let offer"> {{stringHelperService.convertWeiToEth(offer.value)}} ETH </td>
     </ng-container>
 
     <!-- Symbol Column -->
-    <ng-container matColumnDef="actions">
+    <ng-container matColumnDef="actions" stickyEnd>
       <th mat-header-cell *matHeaderCellDef>  </th>
       <td mat-cell *matCellDef="let offer">
         <button mat-raised-button color="primary"
@@ -50,11 +48,3 @@
 
   <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
 </div>
-
-<!-- <app-apply-offer
-  [accounts]="accounts"
-  song="6872036029340158726"
-  limitDays="2"
-  minLikes="2"
-  contractAddress="0xD573c333107B6A39120397a66cBb5395f8B4174d"
-></app-apply-offer> -->

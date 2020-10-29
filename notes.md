@@ -232,4 +232,6 @@ truffle console --network rinkeby
 Maybe useful someday
 
 https://medium.com/web3connect/presenting-web3connect-a-single-web3-widget-for-dapps-ebbb2461ac7c
-
+```
+npm install web3connect
+```

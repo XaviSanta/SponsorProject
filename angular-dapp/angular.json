@@ -3,11 +3,11 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-truffle-box": {
+    "sponsor-project": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "targets": {
+      "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -49,18 +49,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-truffle-box:build"
+            "browserTarget": "sponsor-project:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-truffle-box:build:production"
+              "browserTarget": "sponsor-project:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-truffle-box:build"
+            "browserTarget": "sponsor-project:build"
           }
         },
         "test": {
@@ -89,19 +89,23 @@
             ],
             "exclude": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {}
         }
       }
     },
-    "angular-truffle-box-e2e": {
+    "sponsor-project-e2e": {
       "root": "e2e",
       "sourceRoot": "e2e",
       "projectType": "application",
-      "targets": {
+      "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "angular-truffle-box:serve"
+            "devServerTarget": "sponsor-project:serve"
           }
         },
         "lint": {
@@ -116,7 +120,7 @@
       }
     }
   },
-  "defaultProject": "angular-truffle-box",
+  "defaultProject": "sponsor-project",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
+import { StringHelperService } from '../util/string-helper.service';
 import { Web3Service } from '../util/web3.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class CreateOfferComponent implements OnInit {
 
   constructor(
     private web3Service: Web3Service,
+    private stringHelperService: StringHelperService,
   ) {}
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class CreateOfferComponent implements OnInit {
     });
   }
 
-  async createContract(e) {
+  async createContract() {
     await this.checkAccounts();
     console.log('Creating Contract', this.accounts);
     console.log('Creating Contract', this.song, this.limitDays, this.minLikes, this.value);
@@ -37,7 +39,7 @@ export class CreateOfferComponent implements OnInit {
       const tiktokInstance =
         await tikTokAbstraction.new(this.song, this.limitDays, this.minLikes, {
           from: this.accounts[0],
-          value: this.value,
+          value: this.stringHelperService.convertEthToWei(this.value.toString()),
         });
       console.log('Contract created successfully at address: ', tiktokInstance.address);
     } catch (error) {

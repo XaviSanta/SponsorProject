@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StringHelperService } from './util/string-helper.service';
 import { Web3Service } from './util/web3.service';
 
 @Component({
@@ -8,8 +9,9 @@ import { Web3Service } from './util/web3.service';
 })
 export class AppComponent implements OnInit {
   accounts: string[] = [];
-
+  balance: string = '0';
   constructor(
+    public stringHelperService: StringHelperService,
     private web3Service: Web3Service,
   ) {};
 
@@ -22,9 +24,9 @@ export class AppComponent implements OnInit {
   }
 
   watchAccount() {
-    this.web3Service.accountsObservable.subscribe((accounts) => {
+    this.web3Service.accountsObservable.subscribe(async (accounts) => {
       this.accounts = accounts;
-      // this.refreshBalance();
+      this.balance = await this.web3Service.getBalance(this.accounts[0]);
     });
   }
 
