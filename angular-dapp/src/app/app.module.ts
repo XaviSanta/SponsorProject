@@ -17,6 +17,7 @@ import {
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
+  MatChipsModule,
 } from '@angular/material';
 import { CreateOfferComponent } from './create-offer/create-offer.component';
 import { ApplyOfferComponent } from './apply-offer/apply-offer.component';
@@ -42,6 +43,7 @@ import { ListOffersComponent } from './list-offers/list-offers.component';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatChipsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,

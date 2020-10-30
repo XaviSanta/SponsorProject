@@ -78,7 +78,7 @@ export class Web3Service {
     const accs = await this.getAccounts();
 
     if (!this.accounts || this.accounts.length !== accs.length || this.accounts[0] !== accs[0]) {
-      console.log('Observed new accounts');
+      console.log('Observed new accounts', accs);
 
       this.accountsObservable.next(accs);
       this.accounts = accs;
@@ -102,5 +102,9 @@ export class Web3Service {
     }
 
     return accs;
+  }
+
+  public async getNetworkName(): Promise<string> {
+    return this.web3.eth.net.getNetworkType()
   }
 }

@@ -9,7 +9,10 @@ import { Web3Service } from './util/web3.service';
 })
 export class AppComponent implements OnInit {
   accounts: string[] = [];
+  simplifiedAcc: string = '';
   balance: string = '0';
+  network: string = '';
+
   constructor(
     public stringHelperService: StringHelperService,
     private web3Service: Web3Service,
@@ -26,7 +29,10 @@ export class AppComponent implements OnInit {
   watchAccount() {
     this.web3Service.accountsObservable.subscribe(async (accounts) => {
       this.accounts = accounts;
-      this.balance = await this.web3Service.getBalance(this.accounts[0]);
+      this.simplifiedAcc = this.stringHelperService.simplifyAddress(this.accounts[0]);
+      this.web3Service.getBalance(this.accounts[0]).then(value =>
+        this.balance = this.stringHelperService.convertWeiToEth(value));
+      this.web3Service.getNetworkName().then(value => this.network = value);
     });
   }
 

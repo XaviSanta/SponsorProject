@@ -10,3 +10,16 @@ mat-toolbar {
   margin-left: 30px;
   font-size: large;
 }
+
+.network-chip {
+  font-size: large;
+}
+
+.balance-chip {
+  font-size: large;
+}
+
+.address-chip {
+  font-size: large;
+
+}

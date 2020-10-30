@@ -1,10 +1,8 @@
-<!-- <mat-toolbar color="primary">Sponsor Project</mat-toolbar> -->
 <mat-toolbar color="primary">
   <a class="link-button"
     mat-button
     routerLink="/offers"
     routerLinkActive="active">
-    <mat-icon>fast_forward</mat-icon>
     Sponsor Project
   </a>
 
@@ -22,12 +20,23 @@
   </a>
   <span class="example-spacer"></span>
 
-  {{stringHelperService.convertWeiToEth(balance)}} ETH
+  <div *ngIf="accounts.length !== 0">
+    <mat-chip-list>
 
-  {{stringHelperService.simplifyAddress(accounts[0])}}
+      <mat-chip class="network-chip">
+        {{network}}
+      </mat-chip>
+      <mat-chip class="balance-chip">
+        {{balance}} ETH
+      </mat-chip>
+      <mat-chip class="address-chip">
+        {{simplifiedAcc}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
   <button mat-flat-button
     color="accent"
-    *ngIf="accounts.length == 0"
+    *ngIf="accounts.length === 0"
     (click)="connectWallet()">
     Connect Wallet
   </button>
