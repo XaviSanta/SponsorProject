@@ -19,10 +19,39 @@ export class StringHelperService {
     }
   }
 
-  public simplifySongUrl(address: string) {
-    const start = address.substring(0, 5);
-    const end = address.substring(address.length-4);
-    return `${start}......${end}`;
+  public simplifySongUrl(songUrl: string) {
+    const searchString = 'https://www.tiktok.com/music/';
+    if (songUrl.indexOf(searchString) === 0) {
+      let name = songUrl.substring(searchString.length);
+      name = name.replace(/\?.*/,''); // Removes after query '?'
+      return `${name.slice(0, 20)}...`
+    }
+
+    const end = songUrl.substring(songUrl.length-8);
+    return `...${end}`;
+  }
+
+  public getSongId(url: string): number {
+    url = url.replace(/\?.*/,''); // Removes after query '?';
+    // TODO: retrieve number
+    return +'6872036029340158726';
+  }
+
+  public simplifyLikes(numLikes: number) {
+    const numString = numLikes.toString();
+    const len = numString.length;
+    if (len > 6 ) {
+      const start = numString.substring(0, len-6);
+      const i = numString[len-6];
+      return `${start}.${i}M`;
+    }
+    if (len > 3 ) {
+      const start = numString.substring(0, len-3);
+      const i = numString[len-3];
+      return `${start}.${i}K`;
+    }
+
+    return numString;
   }
 
   public convertWeiToEth(weis: string): string {

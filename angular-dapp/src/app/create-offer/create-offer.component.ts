@@ -32,12 +32,11 @@ export class CreateOfferComponent implements OnInit {
 
   async createContract() {
     await this.checkAccounts();
-    console.log('Creating Contract', this.accounts);
-    console.log('Creating Contract', this.song, this.limitDays, this.minLikes, this.value);
+    const songId = this.stringHelperService.getSongId(this.song);
     try {
       const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
       const tiktokInstance =
-        await tikTokAbstraction.new(this.song, this.limitDays, this.minLikes, {
+        await tikTokAbstraction.new(this.song, songId, this.limitDays, this.minLikes, {
           from: this.accounts[0],
           value: this.stringHelperService.convertEthToWei(this.value.toString()),
         });

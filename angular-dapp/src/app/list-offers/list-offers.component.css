@@ -3,7 +3,9 @@
   width: 100%;
   max-width: 1000px;
   margin: auto;
+  background-color: rgba(0, 0, 0, 0.007);
 }
+
 table {
   width: 100%;
   max-width: 1000px;

@@ -9,6 +9,7 @@ contract TikTokOffer is ChainlinkClient {
     string constant private JOB_ID = "98e390a5427946cfa113a14dbe839b21"; // Likes < uint256
     address owner;
     uint256 song;
+    string songUrl;
     uint256 limitDays;
     uint256 minLikes;
 
@@ -29,13 +30,15 @@ contract TikTokOffer is ChainlinkClient {
     );
 
     constructor (
-        uint256  _song,
+        string memory _songUrl,
+        uint256 _songId,
         uint256 _limitDays,
         uint256 _minLikes
         ) public payable  {
         setPublicChainlinkToken();
         owner = msg.sender;
-        song = _song;
+        songUrl = _songUrl;
+        song = _songId;
         limitDays = _limitDays;
         minLikes = _minLikes;
     }
@@ -45,6 +48,9 @@ contract TikTokOffer is ChainlinkClient {
     }
     function getMusicId() public view returns (uint256){
         return song;
+    }
+    function getMusicUrl() public view returns (string memory){
+        return songUrl;
     }
     function getMinLikes() public view returns (uint256){
         return minLikes;

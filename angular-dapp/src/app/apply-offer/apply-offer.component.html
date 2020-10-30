@@ -1,57 +1,59 @@
-<mat-card class="offer-details mat-elevation-z8">
-  <mat-card-header>
-    <mat-card-title>{{contractAddress}}</mat-card-title>
-    <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <form class="offer-form">
+<div class="center">
 
-      <mat-form-field class="full-width">
-        <mat-label>Song</mat-label>
-        <input matInput readonly
-          [(ngModel)]="song" name="song">
-      </mat-form-field>
+  <mat-card class="offer-details mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title>{{contractAddress}}</mat-card-title>
+      <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="offer-form">
 
-      <mat-form-field class="full-width">
-        <mat-label>Limit Days</mat-label>
-        <input matInput readonly
-          type="number"
-          [(ngModel)]="limitDays" name="limitDays">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Song</mat-label>
+          <input matInput readonly
+            [(ngModel)]="song" name="song">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Min Likes</mat-label>
-        <input matInput readonly
-          type="number"
-          [(ngModel)]="minLikes" name="minLikes">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Limit Days</mat-label>
+          <input matInput readonly
+            type="number"
+            [(ngModel)]="limitDays" name="limitDays">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Reward Value</mat-label>
-        <input matInput readonly
-          [(ngModel)]="value" name="value">
-        <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="setBalance()">
-          <mat-icon aria-hidden="false" aria-label="Refresh balance">refresh</mat-icon>
-        </button>
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Min Likes</mat-label>
+          <input matInput readonly
+            type="number"
+            [(ngModel)]="minLikes" name="minLikes">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Your video URL</mat-label>
-        <input matInput
-          required
-          type="string"
-          [(ngModel)]="videoUrl" name="videoUrl"
-          placeholder="https://www.tiktok.com/@charlidamelio/video/6885801328245820678">
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button
-      class="center"
-      type="submit"
-      (click)="applyOffer()"
-      color="primary">
-      Apply Offer</button>
-  </mat-card-actions>
-</mat-card>
+        <mat-form-field class="full-width">
+          <mat-label>Reward Value</mat-label>
+          <input matInput readonly
+            [(ngModel)]="value" name="value">
+          <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="setBalance()">
+            <mat-icon aria-hidden="false" aria-label="Refresh balance">refresh</mat-icon>
+          </button>
+        </mat-form-field>
 
+        <mat-form-field class="full-width">
+          <mat-label>Your video URL</mat-label>
+          <input matInput
+            required
+            type="string"
+            [(ngModel)]="videoUrl" name="videoUrl"
+            placeholder="https://www.tiktok.com/@charlidamelio/video/6885801328245820678">
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+        type="submit"
+        (click)="applyOffer()"
+        color="primary">
+        Apply Offer</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

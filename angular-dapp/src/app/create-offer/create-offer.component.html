@@ -1,57 +1,60 @@
-<mat-card class="offer-details mat-elevation-z8">
-  <mat-card-header>
-    <mat-card-title>Offer #1</mat-card-title>
-    <mat-card-subtitle>Xavi Santamaria</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <form class="offer-form" (ngSubmit)="createContract()">
+  <mat-card class="offer-details mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title>Offer #1</mat-card-title>
+      <mat-card-subtitle>Xavi Santamaria</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="offer-form" (ngSubmit)="createContract()">
 
-      <mat-form-field class="full-width">
-        <mat-label>Song</mat-label>
-        <input matInput
-          required
-          placeholder="Ex. Pizza"
-          [(ngModel)]="song" name="song">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Song</mat-label>
+          <input matInput
+            required
+            placeholder="Ex. https://www.tiktok.com/music/Space-Cadet-Metro-Boomin-6872036029340158726?lang=en"
+            [(ngModel)]="song"
+            name="song">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Limit Days</mat-label>
-        <input matInput
-          required
-          type="number"
-          [(ngModel)]="limitDays" name="limitDays"
-          placeholder="Ex. Pizza">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Limit Days</mat-label>
+          <input matInput
+            required
+            type="number"
+            [(ngModel)]="limitDays"
+            name="limitDays"
+            placeholder="Ex. Pizza">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Min Likes</mat-label>
-        <input matInput
-          required
-          type="number"
-          [(ngModel)]="minLikes" name="minLikes"
-          placeholder="Ex. Pizza">
-      </mat-form-field>
+        <mat-form-field class="full-width">
+          <mat-label>Min Likes</mat-label>
+          <input matInput
+            required
+            type="number"
+            [(ngModel)]="minLikes"
+            name="minLikes"
+            placeholder="Ex. 100000">
+        </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Reward Value</mat-label>
-        <input matInput
-          required
-          type="number"
-          [(ngModel)]="value" name="value"
-          placeholder="Ex. Pizza">
-        <span matSuffix>ETH</span>
-      </mat-form-field>
-    </form>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button
-      class="center"
-      type="submit"
-      (click)="createContract()"
-      color="primary">
-      Create Contract</button>
-  </mat-card-actions>
-</mat-card>
+        <mat-form-field class="full-width">
+          <mat-label>Reward Value</mat-label>
+          <input matInput
+            required
+            type="number"
+            [(ngModel)]="value"
+            name="value"
+            placeholder="Ex. 1">
+          <span matSuffix>ETH</span>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button
+        type="submit"
+        (click)="createContract()"
+        color="primary">
+        Create Contract</button>
+    </mat-card-actions>
+  </mat-card>
 <!-- <button mat-button
   type="submit"
   (click)="withdrawEth()"
