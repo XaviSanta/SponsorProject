@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
+import { StringHelperService } from '../util/string-helper.service';
 import { Web3Service } from '../util/web3.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class ApplyOfferComponent implements OnInit {
   contractAddress: string;
   accounts: string[];
   song: string;
+  songSimplified: string;
   limitDays: number;
   minLikes: number;
   videoUrl: string;
@@ -24,10 +26,10 @@ export class ApplyOfferComponent implements OnInit {
     private web3Service: Web3Service,
     private route: ActivatedRoute,
     private matSnackBar: MatSnackBar,
+    public stringHelperService: StringHelperService,
   ) {}
 
   async ngOnInit() {
-
     if (this.accounts !== null && this.accounts !== undefined) {
       console.log('aaaa', this.accounts)
       this.setBalance();
@@ -42,7 +44,6 @@ export class ApplyOfferComponent implements OnInit {
         // TODO: Get data
         this.checkAccounts();
         this.setInfo();
-        // this.heroService.getHero(id).subscribe(hero => (this.hero = hero));
       }
     });
 
@@ -77,7 +78,10 @@ export class ApplyOfferComponent implements OnInit {
 
   setInfo() {
     try {
-      this.tiktokInstance.getMusicId.call().then((value) => this.song = value);
+      this.tiktokInstance.getMusicUrl.call().then((value) => {
+        this.song = value;
+        this.songSimplified = this.stringHelperService.simplifySongUrl(value, false);
+      });
       this.tiktokInstance.getLimitDays.call().then((value) => this.limitDays = value);
       this.tiktokInstance.getMinLikes.call().then((value) => this.minLikes = value);
       this.tiktokInstance.getBalance.call().then((value) => this.value = value);

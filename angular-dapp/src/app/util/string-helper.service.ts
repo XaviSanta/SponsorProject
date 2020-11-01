@@ -19,22 +19,23 @@ export class StringHelperService {
     }
   }
 
-  public simplifySongUrl(songUrl: string) {
+  public simplifySongUrl(songUrl: string, slice: boolean = true) {
     const searchString = 'https://www.tiktok.com/music/';
     if (songUrl.indexOf(searchString) === 0) {
       let name = songUrl.substring(searchString.length);
       name = name.replace(/\?.*/,''); // Removes after query '?'
-      return `${name.slice(0, 20)}...`
+      return slice ? `${name.slice(0, 20)}...` : name;
     }
 
     const end = songUrl.substring(songUrl.length-8);
     return `...${end}`;
   }
 
-  public getSongId(url: string): number {
-    url = url.replace(/\?.*/,''); // Removes after query '?';
-    // TODO: retrieve number
-    return +'6872036029340158726';
+  public getSongId(url: string): string {
+    // (\d+)(?!.*\d) // Matches the last number in a string
+    var regex = /(\d+)(?!.*\d)/;
+    var res = regex.exec(url);
+    return res === null ? null : res[0];
   }
 
   public simplifyLikes(numLikes: number) {

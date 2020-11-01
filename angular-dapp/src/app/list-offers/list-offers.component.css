@@ -18,3 +18,7 @@ table {
   max-width: 1500px;
   margin: auto;
 }
+
+td a:hover {
+  text-decoration: underline;
+}

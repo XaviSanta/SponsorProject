@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
 import { StringHelperService } from '../util/string-helper.service';
 import { Web3Service } from '../util/web3.service';
@@ -17,6 +18,7 @@ export class CreateOfferComponent implements OnInit {
 
   constructor(
     private web3Service: Web3Service,
+    private matSnackBar: MatSnackBar,
     private stringHelperService: StringHelperService,
   ) {}
 
@@ -35,12 +37,14 @@ export class CreateOfferComponent implements OnInit {
     const songId = this.stringHelperService.getSongId(this.song);
     try {
       const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+      console.log('Creating Contract with arguments: ', this.song, songId, this.limitDays, this.minLikes);
       const tiktokInstance =
-        await tikTokAbstraction.new(this.song, songId, this.limitDays, this.minLikes, {
+        await tikTokAbstraction.new(this.song, songId, this.limitDays, this.minLikes, { // BigNumber error => pass it as string
           from: this.accounts[0],
           value: this.stringHelperService.convertEthToWei(this.value.toString()),
         });
       console.log('Contract created successfully at address: ', tiktokInstance.address);
+      this.setStatus(`Contract created successfully at address: ${tiktokInstance.address}`);
     } catch (error) {
       console.log('Error on creating contract: ', error);
     }
@@ -68,4 +72,8 @@ export class CreateOfferComponent implements OnInit {
   //     window.history.back();
   //   }
   // }
+
+  setStatus(status) {
+    this.matSnackBar.open(status, 'Close', {duration: 3000});
+  }
 }
