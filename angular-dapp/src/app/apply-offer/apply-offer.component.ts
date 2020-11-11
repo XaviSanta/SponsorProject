@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
@@ -22,6 +22,7 @@ export class ApplyOfferComponent implements OnInit {
   tikTokAbstraction;
   tiktokInstance;
   subtitle: string = '';
+
   constructor(
     private web3Service: Web3Service,
     private route: ActivatedRoute,
@@ -51,7 +52,7 @@ export class ApplyOfferComponent implements OnInit {
   }
 
   setStatus(status) {
-    this.matSnackBar.open(status, 'Close', {duration: 3000});
+    this.matSnackBar.open(status, 'Close', {duration: 5000});
   }
 
   async checkAccounts() {

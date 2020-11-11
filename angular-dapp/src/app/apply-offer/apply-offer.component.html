@@ -2,7 +2,14 @@
 
   <mat-card class="offer-details mat-elevation-z8">
     <mat-card-header>
-      <mat-card-title>{{contractAddress}}</mat-card-title>
+      <mat-card-title id="addrTitle">{{contractAddress}}
+        <a ngxClipboard
+          [cbContent]="contractAddress"
+          mat-button
+          (click)="setStatus('Address copied')">
+          <mat-icon aria-hidden="false" style="font-size: 20px;">content_copy</mat-icon>
+        </a>
+      </mat-card-title>
       <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -15,7 +22,7 @@
           <a mat-button matSuffix mat-icon-button aria-label="Clear"
             href="{{song}}"
             target="_blank">
-            <mat-icon aria-hidden="false">api</mat-icon>
+            <mat-icon aria-hidden="false">launch</mat-icon>
           </a>
         </mat-form-field>
 

@@ -235,3 +235,20 @@ https://medium.com/web3connect/presenting-web3connect-a-single-web3-widget-for-d
 ```
 npm install web3connect
 ```
+
+
+```
+truffle compile
+truffle migrate --network kovan
+```
+deployed factory offer
+```
+"networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x203A4b7c50B6308CE32f3B7D9DDDfDC6E326AaAF",
+      "transactionHash": "0x095597a26dae7959d9bc801af62609d44fa3b979ef916e94c706192833936c3c"
+    }
+  },
+```

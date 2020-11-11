@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
 import { StringHelperService } from '../util/string-helper.service';
 import { Web3Service } from '../util/web3.service';
+import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
+import offerFactory_artifacts from '../../../build/contracts/OfferFactory.json';
 
 @Component({
   selector: 'app-create-offer',
@@ -36,15 +37,21 @@ export class CreateOfferComponent implements OnInit {
     await this.checkAccounts();
     const songId = this.stringHelperService.getSongId(this.song);
     try {
-      const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
-      console.log('Creating Contract with arguments: ', this.song, songId, this.limitDays, this.minLikes);
-      const tiktokInstance =
-        await tikTokAbstraction.new(this.song, songId, this.limitDays, this.minLikes, { // BigNumber error => pass it as string
-          from: this.accounts[0],
-          value: this.stringHelperService.convertEthToWei(this.value.toString()),
-        });
-      console.log('Contract created successfully at address: ', tiktokInstance.address);
-      this.setStatus(`Contract created successfully at address: ${tiktokInstance.address}`);
+      const offerFactoryAbstraction = await this.web3Service.artifactsToContract(offerFactory_artifacts);
+      const instance = await offerFactoryAbstraction.deployed();
+      const result = await instance.createOffer(this.song, songId, this.limitDays, this.minLikes, { // BigNumber error => pass it as string
+        from: this.accounts[0],
+        value: this.stringHelperService.convertEthToWei(this.value.toString()),
+      });
+      // const tikTokAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+      // console.log('Creating Contract with arguments: ', this.song, songId, this.limitDays, this.minLikes);
+      // const tiktokInstance =
+      //   await tikTokAbstraction.new(this.song, songId, this.limitDays, this.minLikes, { // BigNumber error => pass it as string
+      //     from: this.accounts[0],
+      //     value: this.stringHelperService.convertEthToWei(this.value.toString()),
+      //   });
+      console.log('Contract created successfully', result);
+      this.setStatus(`Contract created successfully tx: ${result.receipt.transactionHash}`);
     } catch (error) {
       console.log('Error on creating contract: ', error);
     }
