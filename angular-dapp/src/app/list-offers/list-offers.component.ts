@@ -5,10 +5,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { StringHelperService } from '../util/string-helper.service';
 import { MatSort } from '@angular/material/sort';
 // import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import tikTokOffer_artifacts from '../../../build/contracts/TikTokOffer.json';
-import offerFactory_artifacts from '../../../build/contracts/OfferFactory.json';
+import offer_artifacts from '../../../build/contracts/Offer.json';
+import offerList_artifacts from '../../../build/contracts/OfferList.json';
 import { Web3Service } from '../util/web3.service';
-import { Observable } from 'rxjs';
 @Component({
   selector: 'app-list-offers',
   templateUrl: './list-offers.component.html',
@@ -24,7 +23,7 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
   offerAdresses;
 
   listOfferAddresses: string[] = [];
-  tikTokOfferAbstraction;
+  offerAbstraction;
 
   constructor(
     public stringHelperService: StringHelperService,
@@ -34,7 +33,7 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
 
   async ngOnInit() {
     // For later usage on retrieving the offer informations from the addresses
-    this.tikTokOfferAbstraction = await this.web3Service.artifactsToContract(tikTokOffer_artifacts);
+    this.offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
 
     this.listOfferAddresses = await this.getOffers();
     this.listOfferAddresses.forEach(async (addr) => {
@@ -44,16 +43,16 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
   }
 
   async getOffers() {
-    const offerFactoryAbstraction = await this.web3Service.artifactsToContract(offerFactory_artifacts);
-    const instance = await offerFactoryAbstraction.deployed();
+    const offerListAbstraction = await this.web3Service.artifactsToContract(offerList_artifacts);
+    const instance = await offerListAbstraction.deployed();
     return await instance.getOffers.call();
   }
 
   async getOfferInfo(address: string) {
-    const tiktokInstance = await this.tikTokOfferAbstraction.at(address);
-    const song = await tiktokInstance.getMusicUrl.call();
-    const minLikes = await tiktokInstance.getMinLikes.call();
-    const value = await tiktokInstance.getBalance.call();
+    const offerInstance = await this.offerAbstraction.at(address);
+    const song = await offerInstance.getMusicUrl.call();
+    const minLikes = await offerInstance.getMinLikes.call();
+    const value = await offerInstance.getBalance.call();
     return {
       address,
       song,

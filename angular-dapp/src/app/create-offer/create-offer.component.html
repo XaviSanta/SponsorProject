@@ -1,6 +1,7 @@
   <mat-card class="offer-details mat-elevation-z8">
     <mat-card-header>
-      <mat-card-title>Offer #1</mat-card-title>
+      <mat-card-title *ngIf="contractAddress">Offer Address: {{contractAddress}}</mat-card-title>
+      <mat-card-title *ngIf="!contractAddress">Offer conditions</mat-card-title>
       <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -54,6 +55,9 @@
         color="primary">
         Create Contract</button>
     </mat-card-actions>
+
+    <div *ngIf="isLoading">Please wait until the contract is created.</div>
+    <div *ngIf="contractAddress">Send 1 Link token to the contract created: <strong>{{contractAddress}}</strong></div>
   </mat-card>
 <!-- <button mat-button
   type="submit"

@@ -1,5 +1,5 @@
-var OfferFactory = artifacts.require("./OfferFactory.sol");
+var OfferList = artifacts.require("./OfferList.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(OfferFactory);
+  deployer.deploy(OfferList);
 };

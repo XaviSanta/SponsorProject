@@ -1,6 +1,7 @@
 .offer-details {
   max-width: 800px;
   margin: auto;
+  text-align: center;
 }
 
 .offer-form {
@@ -11,11 +12,4 @@
 
 .full-width {
   width: 100%;
-}
-
-.center {
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center; */
 }

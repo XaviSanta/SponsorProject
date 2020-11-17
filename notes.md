@@ -252,3 +252,13 @@ deployed factory offer
     }
   },
 ```
+```
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x3987831A132F51fb8C9CBA6b5eF102C7841Ac607",
+      "transactionHash": "0x25ad9b3274a77b4d7fe3a1f2f34b08ea266c0c7763d1fb4371d318a997702e62"
+    }
+  },
+```
