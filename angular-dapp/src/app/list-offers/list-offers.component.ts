@@ -50,8 +50,8 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
 
   async getOfferInfo(address: string) {
     const offerInstance = await this.offerAbstraction.at(address);
-    const song = await offerInstance.getMusicUrl.call();
-    const minLikes = await offerInstance.getMinLikes.call();
+    const song = await offerInstance.songUrl.call();
+    const minLikes = await offerInstance.minLikes.call();
     const value = await offerInstance.getBalance.call();
     return {
       address,

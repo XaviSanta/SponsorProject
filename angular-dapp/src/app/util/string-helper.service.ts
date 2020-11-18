@@ -62,4 +62,10 @@ export class StringHelperService {
   public convertEthToWei(ethers: string): string {
     return Web3.utils.toWei(ethers);
   }
+
+  public getDateFromEpoch(value: any): string {
+    // We have to add 3 0's at the end of the epoch
+    const epoch = `${value.toString()}000`;
+    return new Date(+epoch).toUTCString();
+  }
 }

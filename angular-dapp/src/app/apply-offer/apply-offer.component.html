@@ -26,10 +26,10 @@
         </mat-form-field>
 
         <mat-form-field class="full-width">
-          <mat-label>Limit Days</mat-label>
+          <mat-label>Finish date</mat-label>
           <input matInput readonly
-            type="number"
-            [(ngModel)]="limitDays" name="limitDays">
+            type="string"
+            [(ngModel)]="finishDate" name="finishDate">
         </mat-form-field>
 
         <mat-form-field class="full-width">
@@ -62,14 +62,10 @@
     <mat-card-actions>
       <button mat-raised-button
         type="submit"
+        [disabled]="finishDayDate < todayDate"
         (click)="applyOffer()"
         color="primary">
         Apply to Offer</button>
-      <button mat-raised-button
-        type="submit"
-        (click)="applyOffer()"
-        color="primary">
-        Close Offer</button>
     </mat-card-actions>
   </mat-card>
 

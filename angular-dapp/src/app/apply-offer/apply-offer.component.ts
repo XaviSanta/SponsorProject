@@ -15,7 +15,9 @@ export class ApplyOfferComponent implements OnInit {
   accounts: string[];
   song: string;
   songSimplified: string;
-  limitDays: number;
+  finishDate: string;
+  finishDayDate: Date;
+  todayDate = new Date();
   minLikes: number;
   videoUrl: string;
   value: string = 'NaN Refresh Value';
@@ -79,12 +81,15 @@ export class ApplyOfferComponent implements OnInit {
 
   setInfo() {
     try {
-      this.offerInstance.getMusicUrl.call().then((value) => {
+      this.offerInstance.songUrl.call().then((value) => {
         this.song = value;
         this.songSimplified = this.stringHelperService.simplifySongUrl(value, false);
       });
-      this.offerInstance.getLimitDays.call().then((value) => this.limitDays = value);
-      this.offerInstance.getMinLikes.call().then((value) => this.minLikes = value);
+      this.offerInstance.finishTime.call().then((value) => {
+        this.finishDayDate = new Date(+`${value.toString()}000`);
+        this.finishDate = this.stringHelperService.getDateFromEpoch(value);
+      });
+      this.offerInstance.minLikes.call().then((value) => this.minLikes = value);
       this.offerInstance.getBalance.call().then((value) => this.value = value);
     } catch(e) {
       console.log(e);
