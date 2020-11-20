@@ -18,7 +18,7 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, null) paginator: MatPaginator;
   @Input() accounts: string[] = [];
 
-  displayedColumns: string[] = ['address', 'song', 'minLikes', 'value', 'actions'];
+  displayedColumns: string[] = ['time', 'address', 'song', 'minLikes', 'value', 'actions'];
   dataSource = new MatTableDataSource<Offer>([]);
   offerAdresses;
 
@@ -39,6 +39,7 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
     this.listOfferAddresses.forEach(async (addr) => {
       const offer = await this.getOfferInfo(addr);
       this.dataSource.data = [...this.dataSource.data, offer];
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -53,9 +54,11 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
     const song = await offerInstance.songUrl.call();
     const minLikes = await offerInstance.minLikes.call();
     const value = await offerInstance.getBalance.call();
+    const time = await offerInstance.finishTime.call();
     return {
       address,
       song,
+      time: time.toString(),
       value: value.toString(),
       minLikes: minLikes.toString(),
     } as Offer;
@@ -63,7 +66,6 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   gotoOffer(offerAddress: string): void {
@@ -86,7 +88,8 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
 }
 
 export interface Offer {
-  address: string
+  time: string;
+  address: string;
   song: string;
   minLikes: number;
   value: string;

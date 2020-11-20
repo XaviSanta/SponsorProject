@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 import offer_artifacts from '../../../build/contracts/Offer.json';
 import { StringHelperService } from '../util/string-helper.service';
+import { TiktokService } from '../util/tiktok.service';
 import { Web3Service } from '../util/web3.service';
 
 @Component({
@@ -30,11 +31,11 @@ export class ApplyOfferComponent implements OnInit {
     private route: ActivatedRoute,
     private matSnackBar: MatSnackBar,
     public stringHelperService: StringHelperService,
+    private tiktokService: TiktokService,
   ) {}
 
   async ngOnInit() {
     if (this.accounts !== null && this.accounts !== undefined) {
-      console.log('aaaa', this.accounts)
       this.setBalance();
     }
 
@@ -72,7 +73,19 @@ export class ApplyOfferComponent implements OnInit {
 
   async applyOffer() {
     try {
-      await this.offerInstance.applyToOffer(this.videoUrl, { from: this.accounts[0] });
+      this.offerInstance.ApplicationFulfillment().on('data', event => {
+        console.log(event)
+        if(event.args.isFulfilled) {
+          this.setStatus('Video is applied correctly.');
+        } else {
+          this.setStatus('Video did not apply correctly, song used is not the same');
+        }
+      });
+      await this.offerInstance.applyToOffer(this.videoUrl, { from: this.accounts[0] }).on('receipt',
+      (receipt) => {
+        console.log('Receipt', receipt);
+        this.setStatus('Transaction confirmed, checking song used in the video...');
+      });
     } catch (e) {
       console.log(e);
       this.setStatus('Error on applying.');
@@ -104,14 +117,16 @@ export class ApplyOfferComponent implements OnInit {
     }
   }
 
-  async w() {
-    try {
-      console.log(this.accounts[0])
-      const tikTokAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
-      const tiktokInstance = await tikTokAbstraction.at('0x3e9Ba1C4C356B7C0733309aaaD159eEBDFD9f95a');
-      await tiktokInstance.withdrawEth({ from: this.accounts[0] });
-    } catch(e) {
-      console.log(e);
-    }
+  checkVideoMusic() {
+    this.tiktokService.getVideoMetadata(this.videoUrl).subscribe(
+      (res) => {
+        console.log(res);
+        this.setStatus('');
+      },
+      (err) => {
+        console.log(err);
+        this.setStatus('Error');
+      }
+    );
   }
 }

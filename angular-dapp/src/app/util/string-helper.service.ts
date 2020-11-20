@@ -68,4 +68,10 @@ export class StringHelperService {
     const epoch = `${value.toString()}000`;
     return new Date(+epoch).toUTCString();
   }
+
+  public getDateLocalFromEpoch(value: any): string {
+    // We have to add 3 0's at the end of the epoch
+    const epoch = `${value.toString()}000`;
+    return new Date(+epoch).toLocaleDateString();
+  }
 }
