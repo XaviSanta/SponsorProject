@@ -45,7 +45,6 @@ export class ApplyOfferComponent implements OnInit {
         console.log(this.contractAddress)
         this.offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
         this.offerInstance = await this.offerAbstraction.at(this.contractAddress);
-        // TODO: Get data
         this.checkAccounts();
         this.setInfo();
       }
@@ -74,20 +73,18 @@ export class ApplyOfferComponent implements OnInit {
   async applyOffer() {
     try {
       this.offerInstance.ApplicationFulfillment().on('data', event => {
-        console.log(event)
         if(event.args.isFulfilled) {
           this.setStatus('Video is applied correctly.');
         } else {
           this.setStatus('Video did not apply correctly, song used is not the same');
         }
       });
-      await this.offerInstance.applyToOffer(this.videoUrl, { from: this.accounts[0] }).on('receipt',
-      (receipt) => {
-        console.log('Receipt', receipt);
-        this.setStatus('Transaction confirmed, checking song used in the video...');
-      });
+      await this.offerInstance.applyToOffer(this.videoUrl, {
+        from: this.accounts[0] }).on('receipt',
+          (receipt) => {
+            this.setStatus('Transaction confirmed, checking song used in the video...');
+          });
     } catch (e) {
-      console.log(e);
       this.setStatus('Error on applying.');
     }
   }
@@ -103,7 +100,7 @@ export class ApplyOfferComponent implements OnInit {
         this.finishDate = this.stringHelperService.getDateFromEpoch(value);
       });
       this.offerInstance.minLikes.call().then((value) => this.minLikes = value);
-      this.offerInstance.getBalance.call().then((value) => this.value = value);
+      this.web3Service.getBalance(this.contractAddress).then((value) => this.value = value);
     } catch(e) {
       console.log(e);
     }
@@ -128,5 +125,18 @@ export class ApplyOfferComponent implements OnInit {
         this.setStatus('Error');
       }
     );
+  }
+
+  async withdrawEth() {
+    try {
+      console.log(this.accounts[0])
+      const offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
+      const offerInstance = await offerAbstraction.at(this.contractAddress);
+      await offerInstance.withdrawEth({ from: this.accounts[0] });
+      this.setStatus('Eth claimed!');
+    } catch(e) {
+      this.setStatus('Error on claiming ETH');
+      console.log(e);
+    }
   }
 }

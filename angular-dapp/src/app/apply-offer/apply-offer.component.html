@@ -75,6 +75,12 @@
         (click)="applyOffer()"
         color="primary">
         Apply to Offer</button>
+      <button mat-raised-button
+        type="submit"
+        [disabled]="finishDayDate > todayDate"
+        (click)="withdrawEth()"
+        color="primary">
+        Claim</button>
     </mat-card-actions>
   </mat-card>
 

@@ -44,17 +44,19 @@ export class ListOffersComponent implements AfterViewInit, OnInit {
   }
 
   async getOffers() {
-    const offerListAbstraction = await this.web3Service.artifactsToContract(offerList_artifacts);
+    const offerListAbstraction =
+      await this.web3Service.artifactsToContract(offerList_artifacts);
     const instance = await offerListAbstraction.deployed();
     return await instance.getOffers.call();
   }
 
   async getOfferInfo(address: string) {
     const offerInstance = await this.offerAbstraction.at(address);
+    console.log(offerInstance)
     const song = await offerInstance.songUrl.call();
     const minLikes = await offerInstance.minLikes.call();
-    const value = await offerInstance.getBalance.call();
     const time = await offerInstance.finishTime.call();
+    const value = await this.web3Service.getBalance(address);
     return {
       address,
       song,
