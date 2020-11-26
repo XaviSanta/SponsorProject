@@ -23,28 +23,6 @@ export class Web3Service {
   }
 
   public async bootstrapWeb3() {
-    // const web3Connect = new Web3Connect.Core({
-    //   providerOptions: {
-    //     walletconnect: {
-    //       package: WalletConnectProvider, // required
-    //       options: {
-    //         infuraId: '2d964324c5e64933b885b9c03abdd6bb' // required
-    //       }
-    //     },
-    //   }
-    // });
-
-    // // subscribe to connect
-    // web3Connect.on("connect", (provider: any) => {
-    //   this.web3 = new Web3(provider); // add provider to web3
-    // });
-
-    // // subscribe to close
-    // web3Connect.on("close", () => {
-    //   console.log("Web3Connect Modal Closed"); // modal has closed
-    // });
-
-    // web3Connect.toggleModal(); // open modal on button click
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
     if (typeof window.ethereum !== 'undefined') {
       // Use Mist/MetaMask's provider

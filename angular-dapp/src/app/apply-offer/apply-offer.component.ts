@@ -35,14 +35,9 @@ export class ApplyOfferComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    if (this.accounts !== null && this.accounts !== undefined) {
-      this.setBalance();
-    }
-
     this.route.params.forEach(async(params: Params) => {
       if (params['address'] !== undefined) {
         this.contractAddress = params['address'];
-        console.log(this.contractAddress)
         this.offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
         this.offerInstance = await this.offerAbstraction.at(this.contractAddress);
         this.checkAccounts();
@@ -117,8 +112,12 @@ export class ApplyOfferComponent implements OnInit {
   checkVideoMusic() {
     this.tiktokService.getVideoMetadata(this.videoUrl).subscribe(
       (res) => {
-        console.log(res);
-        this.setStatus('');
+        const data = res as any;
+        if (data.result.musicId === this.stringHelperService.getSongId(this.song)) {
+          this.setStatus('Correct song');
+        } else {
+          this.setStatus('Incorrect song');
+        }
       },
       (err) => {
         console.log(err);
@@ -128,15 +127,16 @@ export class ApplyOfferComponent implements OnInit {
   }
 
   async withdrawEth() {
+    if (this.value === "0") {
+      this.setStatus('The contract has no value');
+      return;
+    }
+
     try {
-      console.log(this.accounts[0])
-      const offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
-      const offerInstance = await offerAbstraction.at(this.contractAddress);
-      await offerInstance.withdrawEth({ from: this.accounts[0] });
+      await this.offerInstance.withdrawEth({ from: this.accounts[0] });
       this.setStatus('Eth claimed!');
     } catch(e) {
       this.setStatus('Error on claiming ETH');
-      console.log(e);
     }
   }
 }

@@ -35,10 +35,18 @@ export class CreateOfferComponent implements OnInit {
   }
 
   async createContract() {
-    this.isLoading = true;
-    await this.checkAccounts();
-    const songId = this.stringHelperService.getSongId(this.song);
     try {
+      if (this.accounts === undefined) {
+        this.accounts = await this.web3Service.getAccounts();
+      }
+    } catch(error) {
+      this.setStatus('Connect your Wallet');
+      return;
+    }
+
+    try {
+      this.isLoading = true;
+      const songId = this.stringHelperService.getSongId(this.song);
       const offerAbstraction = await this.web3Service.artifactsToContract(offer_artifacts);
       const offerInstance =
         await offerAbstraction.new(this.song, songId, this.limitDays, this.minLikes, {
@@ -50,12 +58,6 @@ export class CreateOfferComponent implements OnInit {
       this.setStatus(`Contract created successfully at address: ${offerInstance.address}`);
     } catch (error) {
       this.setStatus('Error on creating contract');
-    }
-  }
-
-  async checkAccounts() {
-    if (this.accounts === undefined) {
-      this.accounts = await this.web3Service.getAccounts();
     }
   }
 

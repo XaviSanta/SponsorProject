@@ -63,6 +63,7 @@
     <mat-card-actions>
       <button mat-raised-button
         type="submit"
+        [disabled]="!song || !videoUrl || 0 === videoUrl.length"
         (click)="checkVideoMusic()"
         color="primary">
         Check Video Music</button>
